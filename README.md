@@ -9,11 +9,13 @@ Extract only minimum required to run an app in a container
 ```
 FROM ghcr.io/maggie0002/dockerize as dockerize
 
-RUN apk add grep
+RUN apk add jq
 
-RUN dockerize -n -o /app/ -a $(which grep) $(which grep)
+RUN dockerize -n -o /app/ -a $(which jq) $(which jq)
 
-FROM alpine
+FROM scratch
 
-COPY --from=dockerize /app .
+COPY --from=dockerize /app /
+
+CMD ["jq", "--help"]
 ```
